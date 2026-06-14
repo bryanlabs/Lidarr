@@ -15,6 +15,9 @@ function AlbumCover(props) {
 }
 
 AlbumCover.propTypes = {
+  className: PropTypes.string,
+  images: PropTypes.arrayOf(PropTypes.object).isRequired,
+  lazy: PropTypes.bool,
   size: PropTypes.number.isRequired
 };
 

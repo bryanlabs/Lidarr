@@ -1,5 +1,5 @@
 import ModelBase from 'App/ModelBase';
-import Artist from 'Artist/Artist';
+import Artist, { Image } from 'Artist/Artist';
 
 export interface Statistics {
   trackCount: number;
@@ -17,6 +17,7 @@ interface Album extends ModelBase {
   overview: string;
   disambiguation?: string;
   albumType: string;
+  images: Image[];
   monitored: boolean;
   releaseDate: string;
   statistics: Statistics;

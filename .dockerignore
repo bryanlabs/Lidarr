@@ -1,0 +1,9 @@
+.git
+.github
+_artifacts
+_output
+_tests
+_temp
+node_modules
+frontend/node_modules
+*.log

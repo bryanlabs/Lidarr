@@ -1,0 +1,44 @@
+FROM --platform=$BUILDPLATFORM mcr.microsoft.com/dotnet/sdk:8.0.421-bookworm-slim AS build
+
+ARG TARGETARCH
+ARG LIDARR_VERSION=2.14.5.1
+
+WORKDIR /src
+
+RUN apt-get update \
+  && apt-get install -y --no-install-recommends ca-certificates curl git gnupg \
+  && curl -fsSL https://deb.nodesource.com/setup_20.x | bash - \
+  && apt-get install -y --no-install-recommends nodejs \
+  && npm install -g yarn@1.22.19 \
+  && rm -rf /var/lib/apt/lists/*
+
+COPY . .
+
+RUN LIDARRVERSION="${LIDARR_VERSION}" BUILD_SOURCEBRANCHNAME="bryanlabs" \
+  ./build.sh --backend --frontend --packages -f net8.0 -r linux-x64
+
+FROM mcr.microsoft.com/dotnet/runtime-deps:8.0-bookworm-slim
+
+LABEL org.opencontainers.image.title="Bryanlabs Lidarr"
+LABEL org.opencontainers.image.description="Bryanlabs-controlled Lidarr build with album-first library view"
+LABEL org.opencontainers.image.source="https://github.com/bryanlabs/Lidarr"
+
+ENV TZ=America/New_York \
+    DOTNET_SYSTEM_GLOBALIZATION_INVARIANT=false
+
+RUN apt-get update \
+  && apt-get install -y --no-install-recommends ca-certificates curl icu-devtools tzdata \
+  && rm -rf /var/lib/apt/lists/* \
+  && groupadd --gid 1000 lidarr \
+  && useradd --uid 1000 --gid 1000 --home-dir /config --shell /usr/sbin/nologin lidarr \
+  && mkdir -p /app/lidarr /config /music /downloads \
+  && chown -R 1000:1000 /app/lidarr /config /music /downloads
+
+COPY --from=build --chown=1000:1000 /src/_artifacts/linux-x64/net8.0/Lidarr/ /app/lidarr/
+
+USER 1000:1000
+WORKDIR /app/lidarr
+EXPOSE 8686
+VOLUME ["/config", "/music", "/downloads"]
+
+ENTRYPOINT ["/app/lidarr/Lidarr", "-nobrowser", "-data=/config"]

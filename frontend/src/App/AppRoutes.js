@@ -5,6 +5,7 @@ import BlocklistConnector from 'Activity/Blocklist/BlocklistConnector';
 import HistoryConnector from 'Activity/History/HistoryConnector';
 import QueueConnector from 'Activity/Queue/QueueConnector';
 import AlbumDetailsPageConnector from 'Album/Details/AlbumDetailsPageConnector';
+import AlbumIndex from 'Album/Index/AlbumIndex';
 import ArtistDetailsPageConnector from 'Artist/Details/ArtistDetailsPageConnector';
 import ArtistIndex from 'Artist/Index/ArtistIndex';
 import CalendarPageConnector from 'Calendar/CalendarPageConnector';
@@ -50,6 +51,12 @@ function AppRoutes(props) {
       <Route
         exact={true}
         path="/"
+        component={AlbumIndex}
+      />
+
+      <Route
+        exact={true}
+        path="/artists"
         component={ArtistIndex}
       />
 
@@ -62,7 +69,7 @@ function AppRoutes(props) {
             render={() => {
               return (
                 <Redirect
-                  to={getPathWithUrlBase('/')}
+                  to={getPathWithUrlBase('/artists')}
                   component={app}
                 />
               );

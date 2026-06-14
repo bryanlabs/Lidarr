@@ -42,10 +42,18 @@ export const defaultState = {
     rating: function(item) {
       return item.ratings.value;
     },
+    artistName: function(item) {
+      return item.artist?.artistName?.toLocaleLowerCase() || '';
+    },
     size: function(item) {
       const { statistics = {} } = item;
 
       return statistics.sizeOnDisk || 0;
+    },
+    trackCount: function(item) {
+      const { statistics = {} } = item;
+
+      return statistics.trackCount || 0;
     },
     releaseDate: function({ releaseDate }) {
       return releaseDate || '0';

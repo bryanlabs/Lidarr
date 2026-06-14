@@ -23,8 +23,16 @@ const links = [
     iconName: icons.ARTIST_CONTINUING,
     title: () => translate('Library'),
     to: '/',
-    alias: '/artist',
+    alias: '/album',
     children: [
+      {
+        title: () => translate('Albums'),
+        to: '/'
+      },
+      {
+        title: () => translate('Artist'),
+        to: '/artists'
+      },
       {
         title: () => translate('AddNew'),
         to: '/add/search'
