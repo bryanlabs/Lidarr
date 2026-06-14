@@ -46,6 +46,15 @@ function getTrackSummary(album: Album) {
   return `${statistics.trackFileCount || 0}/${statistics.trackCount} tracks`;
 }
 
+function hasImportedTracks(album: Album) {
+  const statistics = album.statistics;
+
+  return (
+    (statistics?.trackFileCount || 0) > 0 ||
+    (statistics?.sizeOnDisk || 0) > 0
+  );
+}
+
 function AlbumCard({ album }: { album: Album }) {
   const artist = album.artist;
   const artistName = getArtistName(album);
@@ -102,7 +111,8 @@ function AlbumIndex() {
   } = useSelector((state: AppState) => albumCollectionSelector(state));
   const dispatch = useDispatch();
   const scrollerRef = useRef<HTMLDivElement>(null);
-  const hasNoAlbums = !items.length;
+  const downloadedAlbums = items.filter(hasImportedTracks);
+  const hasNoAlbums = !downloadedAlbums.length;
 
   useEffect(() => {
     dispatch(fetchAlbums());
@@ -159,13 +169,13 @@ function AlbumIndex() {
             </div>
           ) : null}
 
-          {!error && isPopulated && !items.length ? (
-            <div className={styles.emptyMessage}>No albums found</div>
+          {!error && isPopulated && !downloadedAlbums.length ? (
+            <div className={styles.emptyMessage}>No downloaded albums found</div>
           ) : null}
 
-          {!error && isPopulated && !!items.length ? (
+          {!error && isPopulated && !!downloadedAlbums.length ? (
             <div className={styles.albumGrid}>
-              {items.map((album: Album) => (
+              {downloadedAlbums.map((album: Album) => (
                 <AlbumCard key={album.id} album={album} />
               ))}
             </div>
