@@ -69,7 +69,7 @@ function AppRoutes(props) {
             render={() => {
               return (
                 <Redirect
-                  to={getPathWithUrlBase('/artists')}
+                  to={getPathWithUrlBase('/')}
                   component={app}
                 />
               );

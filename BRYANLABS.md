@@ -15,7 +15,7 @@ Build and push for the media-suite deployment:
 docker buildx build \
   --platform linux/amd64 \
   -f Dockerfile.bryanlabs \
-  -t ghcr.io/bryanlabs/lidarr:v2.14.5.1-bryanlabs.1 \
+  -t ghcr.io/bryanlabs/lidarr:v2.14.5.1-bryanlabs.2 \
   --push .
 ```
 
